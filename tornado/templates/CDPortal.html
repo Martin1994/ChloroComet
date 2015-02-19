@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <title>ChloroComet Client Cross Domain Portal Frame</title>
+        <script type="text/javascript" src="./js/chlorocomet.js"></script>
+        <script type="text/javascript">
+            var url = window.location.href;
+            url = url.substr(url.indexOf("//") + 2);
+            url = url.substr(0, url.lastIndexOf("/") + 1);
+
+            var client = new ChloroCometClient(url, "{{token}}");
+            if (top != this && typeof parent.postMessage != "undefined") {
+                client.onMessage = function (event) {
+                    parent.postMessage(event.message, "*");
+                };
+            } else {
+                client.onMessage = function (event) {
+                    var newMessage = document.createElement("p");
+                    newMessage.innerHTML = event.message;
+                    document.body.appendChild(newMessage);
+                };
+            }
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
